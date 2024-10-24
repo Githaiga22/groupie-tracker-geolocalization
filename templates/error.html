@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
+    <title>{{.Title}}</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="error-page">
+        <h1>{{.Title}}</h1>
+        <p>{{.Message}}</p>
+    </div>
+     <!--Add back-button-->
+     <div class ="back-button">
+        <button style="display: inline-block;
+        outline: 0;
+        border: none;
+        cursor: pointer;
+        font-weight: 600;
+        border-radius: 4px;
+        font-size: 16px;
+        height: 30px;
+        background-color: #e40ec70d;
+        color: #0e0e10;
+        margin :1em;
+        padding: 0 20px;" onclick="goBack()">Go Back</button>
+    </div>
+    <script>
+        function goBack() {
+            window.history.back();
+        }
+    </script>
+</body>
+</html>

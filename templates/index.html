@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
+    <title>Groupie Trackers</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <header>
+        <h1>Artists</h1>
+      
+    </header>
+
+
+    <ul class="ul">
+        {{range .}}
+        <li>
+            <div class="card">
+                <div class="container">
+                    <form id="artistForm{{.Id}}" action="/artist" method="GET">
+                        <input type="hidden" id="idField" name="id" value="{{.Id}}">
+                    </form>
+                    <a href="/artist?id={{.Id}}">
+                        <img src="{{.Image}}" alt="{{.Name}}"> <!-- Artist image -->
+                    </a>
+                    <div class="event-details"></div>
+                    <h2 class="artist-name">{{.Name}}</h2> 
+                        <button class="artist-button"><a href="/locations?id={{.Id}}" class="location" >Locations</a></button>
+                        <button class="artist-button"><a href="/dates?id={{.Id}}" class="date">Dates</a></button>
+                    </div>
+                    
+                </div>
+            </div>
+        </li>
+        {{end}}
+    </ul>
+    
+
+    <script>
+        function submitForm(id,endpoint) {
+            // Get form using the unique id
+            var form = document.getElementById('artistForm'+id);
+            if (form) {
+                form.submit();
+            }
+        }    
+    </script>
+</body>
+</html>

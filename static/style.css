@@ -1,0 +1,165 @@
+/* Container for the grid */
+body{
+    font-family:Arial,SystemFont, Roboto, Ubuntu,system-ui, -apple-system, BlinkMac;
+    background-color: whitesmoke;
+    -webkit-font-smoothing: antialiased;
+}
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+    padding: 0;
+    list-style: none;
+}
+
+/* Card styling */
+.card {
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    transition: transform 0.3s ease-in-out;
+    border-radius: 5px;
+    position: relative;
+    overflow: hidden;
+    height: 100%; /* Ensure cards are of equal height */
+    text-align: center;
+}
+
+/* On hover, the card expands slightly */
+.card:hover {
+    transform: scale(1.05);
+    z-index: 1; /* Bring the hovered card in front of others */
+}
+
+
+/* Image styling */
+img {
+    border-radius: 5px 5px 0 0;
+    width: 100%;
+}
+
+/* Container styling */
+.container {
+    padding: 2px 16px;
+    position: relative;
+}
+
+/* Show members on hover without affecting layout */
+.card:hover .members {
+    opacity: 1;
+    max-height: 100px; /* Adjust this value based on content */
+    color: #09a14e;
+}
+
+
+.card:hover img {
+    transform: scale(1.1);
+    /* translate: ; */
+} 
+
+body {
+    font-family: Arial, sans-serif; /* Set a clean font for the body */
+    background-size: cover; /* Cover the entire background */
+    background-position: center; /* Center the background image */
+    margin: 0; /* Remove default margin */
+    padding: 20px; /* Add padding around the body */
+    color: #220b0b; /* Set default text color to white for better contrast */
+}
+
+header {
+    display: flex; /* Use flexbox for layout */
+    justify-content: space-between; /* Space between title and search bar */
+    align-items: center; /* Center items vertically */
+    margin-bottom: 20px; /* Space below the header */
+}
+
+h1 {
+    background-color: rgba(167, 14, 238, 0.8); /* Semi-transparent background for the heading */
+    color: #fff; /* White text color */
+    padding: 10px; /* Padding around the heading */
+    border-radius: 8px; /* Rounded corners for the heading */
+    text-align: center; /* Center the heading text */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow for depth */
+    flex-grow: 1; /* Allow the heading to take available space */
+}
+
+
+ul {
+    list-style-type: none; /* Remove bullet points */
+    padding: 0; /* Remove padding */
+    display: flex; /* Use flexbox for layout */
+    flex-wrap: wrap; /* Allow wrapping of cards */
+    justify-content: center; /* Center the cards */
+}
+
+li {
+    /*list-style-type: none;
+    width: 22%; /* Set the width of each list item to 22% (4 per row with space) */
+    padding: 10px; /* Add some padding around each list item */
+    box-sizing: border-box; /* Include padding in the width calculation */
+}.card {
+    position: relative; /* Position relative for absolute positioning of hover text */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow for depth */
+    transition: 0.3s; /* Smooth transition for hover effect */
+    border-radius: 8px; /* Rounded corners */
+    background-color: #ffffff; /* White background for cards */
+    overflow: hidden; /* Prevent overflow of content */
+}
+
+.container {
+    padding: 16px;
+    text-align: center; 
+}
+
+.artist-name {
+    /*display: none;  Hide the artist name by default */
+    font-size: 1.2em; /* Font size for the artist name */
+    color: #0f0f0f; /* Blue color for artist names */
+    margin-top: 10px; /* Space above the artist name */
+}
+
+.card:hover .artist-name {
+    display: block; /* Show the artist name on hover */
+}
+
+.event-details {
+    margin-top: 10px;
+    background-color: rgba(255, 255, 255, 0.8); /* Background for the details */
+    padding: 5px 10px; /* Padding around the details */
+    border-radius: 4px; /* Rounded corners */
+    font-size: 14px; /* Font size for the links */
+    display: block; /* ensure it is available */
+}
+
+.card:hover .event-details {
+    display: block; /* Show on card hover */
+}
+
+.event-details a {
+    color: #007bff; /* Link color */
+    text-decoration: none; /* Remove underline */
+}
+
+.event-details a:hover {
+    text-decoration: underline; /* Underline on hover */
+}
+.places {
+    text-transform: capitalize;
+}
+
+.artist-button{
+    display: inline-block;
+    outline: 0;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    border-radius: 4px;
+    font-size: 13px;
+    height: 30px;
+    background-color: #e40ec70d;/*>>Button color<<<*/
+    color: #0e0e10;
+    padding: 0 20px;
+    
+} a {
+    text-decoration: none;
+    color:inherit
+    
+}

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
+    <link rel="preload" href="/static/page.css" as="style" onload="this.rel='stylesheet'">
+    <style>.album-section {
+        display: flex; /* Makes children side-by-side */
+        gap: 20px; /* Adds space between image and band info */
+    }
+    
+    .album-image, .band-info {
+        flex: 1; /* Equal space distribution */
+    }
+    
+    .band-info .members {
+        list-style-type: none; /* Remove bullet points */
+        padding: 0; /* Remove default padding */
+        margin: 0; /* Remove default margin */
+    }
+    
+    .band-info .members li {
+        margin-bottom: 5px; /* Adds space between member names */
+    }
+    
+    img {
+        max-width: 100%; /* Responsive image size */
+        height: auto; /* Maintain aspect ratio */
+    }
+    </style>
+
+</head>
+<body>
+
+    <div class="container">
+        <h1 style="color:purple;">{{.Name}}</h1> 
+        <div class="album-section">
+            <div class="album-image">
+                <img src="{{.Image}}" alt="{{.Name}}" width="400" height="400">
+                <p><strong>{{.Name}} was established in {{.CreationDate}}. The first album was released on {{.FirstAlbum}}.</strong></p>
+            </div>
+            <div class="band-info">
+                <h3>Members</h3>
+                <ul class="members">
+                    {{range .Members}}
+                    <li>{{.}}</li>
+                    {{end}}
+                </ul>
+            </div>
+        </div>
+        
+        
+        <div class="concerts">
+            <h2>Tour Dates</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Location</th>
+                        <th>Dates</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{ range $key,$value := .DateAndLocation}}
+                    <tr >
+                        <td class="places" style="text-transform: capitalize;">{{$key}}</td>
+                        <td class="places" style="text-transform: capitalize;">
+                            <ul>
+                                {{range $item := $value}}
+                                <li style="list-style-type: none;"> {{$item}}</li>
+                                {{end}}
+                            </ul>
+                        </td>
+                    </tr>
+                    {{end}}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Add Back Button -->
+        <div class="back-button">
+            <button onclick="goBack()" style=" display: inline-block;
+            outline: 0;
+            border: none;
+            cursor: pointer;
+            font-weight: 400;
+            border-radius: 4px;
+            font-size: 20px;
+            height: 30px;
+            background-color: #e40ec70d;
+            color: #0e0e10;
+            margin :1em;
+            padding: 0 20px;">Back</button>
+        </div>
+    </div>
+
+    <script>
+        function goBack() {
+            window.history.back();
+        }
+    </script>
+
+</body>
+</html>

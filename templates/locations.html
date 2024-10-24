@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
+    <title>Artists</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <h1>Locations</h1>
+        <div>
+        <p class="locations">{{range .Locations}}
+        <li class="places">{{.}}</li>
+        {{end}}
+    </p>
+    </div>
+    <!--Add back-button-->
+    <div class ="back-button">
+        <button onclick="goBack()" style="display: inline-block;
+        outline: 0;
+        border: none;
+        cursor: pointer;
+        font-weight: 600;
+        border-radius: 4px;
+        font-size: 16px;
+        height: 30px;
+        background-color: #e40ec70d;
+        color: #0e0e10;
+        margin :1em;
+        padding: 0 20px;">Back</button>
+    </div>
+    <script>
+        function goBack() {
+            window.history.back();
+        }
+    </script>
+</body>
+</html>

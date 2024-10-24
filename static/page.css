@@ -1,0 +1,59 @@
+body {
+    font-family:  -apple-system, BlinkMac,Arial, Helvetica, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.album-image img{
+    width: 100%;
+    max-width: 400px;
+    height: auto;
+    border-radius: 10px;
+}
+ .album-image img:hover {
+    transform: scale(1.04); /** click on image it expands**/
+} 
+
+.concerts{
+    margin-top: 30px ;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.container {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 20px black;
+    padding: 30px;
+    max-width: 900px;
+    width: 90%; 
+
+}
+.concerts {
+    width: 100%; /* Adjust width as necessary */
+    text-align: center; /* Center align the title */
+}
+
+h2 {
+    margin-bottom: 20px; /* Space between title and table */
+}
+
+table {
+    width: 100%; /* Make the table full-width */
+    border-collapse: collapse; /* Optional: Remove gaps between table cells */
+}
+
+th, td {
+    border: 1px solid #ddd; /* Add borders to table cells */
+    padding: 8px; /* Add padding for better spacing */
+}
+
+th {
+    background-color: #f2f2f2; /* Background color for header cells */
+}
+
