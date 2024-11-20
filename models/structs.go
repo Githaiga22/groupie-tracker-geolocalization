@@ -61,3 +61,23 @@ type Data struct {
 	Dates           []Date
 	Locations       []Location
 }
+
+// GEOCODE FOR LOCATIONS
+
+type AutocompleteResponse struct {
+	Items []struct {
+		ID      string `json:"id"`
+		Title   string `json:"title"`
+		Address struct {
+			Label string `json:"label"`
+		} `json:"address"`
+	} `json:"items"`
+}
+
+type GeocodeResponse struct {
+	Title    string `json:"title"`
+	Position struct {
+		Lat float64 `json:"lat"`
+		Lng float64 `json:"lng"`
+	} `json:"position"`
+}
