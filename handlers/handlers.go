@@ -106,7 +106,7 @@ func LocationHandler(w http.ResponseWriter, r *http.Request) {
 
 	tmpl, err := template.ParseFiles("templates/locations.html")
 	if err != nil {
-		InternalServerHandler(w)
+		http.Error(w, "Error loading page", http.StatusInternalServerError)
 		log.Println("Template 2 parsing error: ", err)
 		return
 
@@ -239,9 +239,11 @@ func renderErrorPage(w http.ResponseWriter, statusCode int, title, message strin
 		Message: message,
 	}
 	if err := tmpl.Execute(w, data); err != nil {
-		InternalServerHandler(w)
+		log.Println("Error: page execution:", err)
+		http.Error(w, "Internal SErver Error", http.StatusInternalServerError)
 	}
 }
+
 // Response represents the API key response structure
 type Response struct {
 	APIKey string `json:"apiKey"`
