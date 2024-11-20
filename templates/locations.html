@@ -6,15 +6,86 @@
     <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
     <title>Artists</title>
     <link rel="stylesheet" href="/static/style.css">
+
+     <!-- HERE Maps API Scripts -->
+     <script src="https://js.api.here.com/v3/3.1/mapsjs-core.js"></script>
+     <script src="https://js.api.here.com/v3/3.1/mapsjs-service.js"></script>
+     <script src="https://js.api.here.com/v3/3.1/mapsjs-ui.js"></script>
+     <script src="https://js.api.here.com/v3/3.1/mapsjs-mapevents.js"></script>
+     <link rel="stylesheet" href="https://js.api.here.com/v3/3.1/mapsjs-ui.css" />
+     <style>
+        #mapContainer {
+            width: 100%;
+            height: 500px;
+            position: relative;
+        }
+
+        #mapContainer canvas{
+            display: block;
+        }
+    </style>
 </head>
 <body>
     <h1>Locations</h1>
         <div>
-        <p class="locations">{{range .Locations}}
-        <li class="places">{{.}}</li>
-        {{end}}
+        <p class="locations" id="locations">        
     </p>
     </div>
+     <div class="map-section">
+        <div id="mapContainer"></div>
+    
+        <script> 
+        // Initialize map functionality
+        function initMap(apiKey) {
+            const platform = new H.service.Platform({
+                apikey: apiKey
+            });
+
+            // Map configuration. Default to london
+            const latitude = 51.5074;
+            const longitude = -0.1278;
+            const defaultLayers = platform.createDefaultLayers();
+            
+            // Create map instance
+            const map = new H.Map(
+                document.getElementById('mapContainer'),
+                defaultLayers.vector.normal.map,
+                {
+                    center: { lat: latitude, lng: longitude },
+                    zoom: 2.1,
+                    maxZoom:0,
+                    pixelRatio: window.devicePixelRatio || 1
+                }
+            );
+
+            // Add window resize handler
+            window.addEventListener('resize', () => map.getViewPort().resize());
+
+            // Enable map interactions
+            const behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
+            // Add UI controls
+            const ui = H.ui.UI.createDefault(map, defaultLayers);
+            // Add custom marker
+            const svgIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="#FF4136">
+             <path d="M12 0C7.31 0 3.5 3.81 3.5 8.5C3.5 14.87 12 24 12 24S20.5 14.87 20.5 8.5C20.5 3.81 16.69 0 12 0ZM12 13C9.79 13 8 11.21 8 9C8 6.79 9.79 5 12 5C14.21 5 16 6.79 16 9C16 11.21 14.21 13 12 13Z"/>
+            </svg>`;
+             const icon = new H.map.Icon(svgIcon, {
+                  size: { w: 48, h: 48 },
+                  anchor: { x: 24, y: 48 }  // Anchor point at bottom center of the icon
+              });
+
+              locationMap.forEach(location => {
+                const latitude = parseFloat(location.Locations[0]);
+                const longitude = parseFloat(location.Locations[1]);
+                console.log(latitude,longitude)  
+                const marker = new H.map.Marker({lat: latitude,lng: longitude},{icon: icon});
+                map.addObject(marker);              
+            });
+            }
+
+        </script>
+    </div>
+
     <!--Add back-button-->
     <div class ="back-button">
         <button onclick="goBack()" style="display: inline-block;
