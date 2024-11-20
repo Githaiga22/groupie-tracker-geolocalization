@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"os"
 	"strconv"
+	"strings"
 
 	model "tracker/models"
 	"tracker/src"
@@ -111,7 +112,44 @@ func LocationHandler(w http.ResponseWriter, r *http.Request) {
 		return
 
 	}
-	err = tmpl.Execute(w, locations)
+
+	type tempLocations struct {
+		Name      string
+		Locations []string
+	}
+
+	// create a map[string]string{locationName:[lat;long]}
+	locationMap := []tempLocations{}
+	if len(locations.Locations) > 0 {
+		for _, locationNames := range locations.Locations {
+			latLong, err := src.FetchLocationMap(locationNames)
+			if err != nil {
+				InternalServerHandler(w)
+				log.Println("Error retrieving coordinates: ", err)
+				return
+			}
+			splitCoordinates := strings.Split(latLong, " ")
+			// println(locationNames,splitCoordinates[0], "and", splitCoordinates[1])
+			newLocation := tempLocations{locationNames, splitCoordinates}
+
+			// println(newLocation.Name, newLocation.Locations[0], newLocation.Locations[1])
+
+			locationMap = append(locationMap, newLocation)
+			// locationMap[locationNames] = []string{splitCoordinates[0],splitCoordinates[1]}
+		}
+	}
+
+	locationMapJSON, err := json.Marshal(locationMap)
+	if err != nil {
+		log.Println("Error serializing LocationMap:", err)
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+
+	data := map[string]interface{}{
+		"LocationMap": string(locationMapJSON),
+	}
+	err = tmpl.Execute(w, data)
 	if err != nil {
 		log.Println("Template 2 execution error: ", err)
 		return

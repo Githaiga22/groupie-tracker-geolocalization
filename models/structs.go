@@ -81,3 +81,7 @@ type GeocodeResponse struct {
 		Lng float64 `json:"lng"`
 	} `json:"position"`
 }
+
+type LocationData struct {
+	LocationMap map[string][]string
+}
