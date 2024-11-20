@@ -35,6 +35,18 @@
         <div id="mapContainer"></div>
     
         <script> 
+        const locationMap = JSON.parse(`{{.LocationMap}}`);
+
+        const locationList = document.getElementById('locations');
+
+        locationMap.forEach(location => {
+            const listItem = document.createElement('li');
+            listItem.className = 'places';
+            listItem.textContent = location.Name;
+            locationList.appendChild(listItem);
+            // console.log(location.Name)
+        });
+        
         // Initialize map functionality
         function initMap(apiKey) {
             const platform = new H.service.Platform({
