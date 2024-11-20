@@ -7,6 +7,7 @@ import (
 	"os"
 
 	"tracker/handlers"
+
 )
 
 func main() {
@@ -21,6 +22,8 @@ if len(args) > 1 {
 	http.HandleFunc("/artist", handlers.ArtistHandler)
 	http.HandleFunc("/dates", handlers.DateHandler)
 	http.HandleFunc("/locations", handlers.LocationHandler)
+
+	http.HandleFunc("/getApiKey", handlers.GetApiKey)
 	// serve the static files
 	fs := http.FileServer(http.Dir("static"))
 	http.Handle("/static/", http.StripPrefix("/static/", fs))

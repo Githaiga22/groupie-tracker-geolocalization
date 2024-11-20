@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"encoding/json"
 	"fmt"
 	"html/template"
 	"log"
@@ -126,7 +127,7 @@ func ArtistHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
 		wrongMethodHandler(w)
 		return
-	}  
+	}
 
 	id := r.URL.Query().Get("id")
 
@@ -144,8 +145,6 @@ func ArtistHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	idNum -= 1
 
-
-
 	if len(AllArtistInfo) == 0 {
 		r.URL.Path = "/"
 		r.Method = http.MethodGet
@@ -155,7 +154,6 @@ func ArtistHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	AllArtistInfo[idNum].DateAndLocation = datesAndConcerts
-
 
 	Data := AllArtistInfo[idNum]
 
@@ -226,8 +224,8 @@ func HomepageHandler(w http.ResponseWriter, r *http.Request) {
 
 func renderErrorPage(w http.ResponseWriter, statusCode int, title, message string) {
 	w.WriteHeader(statusCode)
-	tmpl,err := template.ParseFiles("templates/error.html")
-	if err != nil{
+	tmpl, err := template.ParseFiles("templates/error.html")
+	if err != nil {
 		log.Println("Error page parsing error:", err)
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 		return
@@ -243,6 +241,33 @@ func renderErrorPage(w http.ResponseWriter, statusCode int, title, message strin
 	if err := tmpl.Execute(w, data); err != nil {
 		InternalServerHandler(w)
 	}
+}
+// Response represents the API key response structure
+type Response struct {
+	APIKey string `json:"apiKey"`
+}
+
+// GetApiKey handles the API key retrieval endpoint
+func GetApiKey(w http.ResponseWriter, r *http.Request) {
+	// Only allow GET requests
+	if r.Method != http.MethodGet {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+
+	apiKey := os.Getenv("HEREAPI_KEY")
+	if apiKey == "" {
+		// Set JSON content type even for errors
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(map[string]string{
+			"error": "API key not set",
+		})
+		return
+	}
+
+	// Set content type before writing response
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(Response{APIKey: apiKey})
 }
 
 func notFoundHandler(w http.ResponseWriter) {
