@@ -9,6 +9,7 @@
 - Artist profile pages with discography and biography
 - Similar artist recommendations
 - Responsive design for optimal user experience
+- Geolocalization: mapping the different concerts locations of a certain artist/band given by the client.
 
 ### Technologies Used:
 - Frontend: HTML, CSS, JavaScript

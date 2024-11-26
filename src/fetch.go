@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"os"
 	"strconv"
 
 	model "tracker/models"
@@ -137,4 +138,46 @@ func FetchDatesAndConcerts(id string) (model.DatesLocations, error) {
 	}
 
 	return datesLocations, nil
+}
+
+func FetchLocationMap(name string) (string, error) {
+	apiKey := os.Getenv("HEREAPI_KEY")
+
+	// Autocomplete request to get place ID
+	autoCompleteURL := fmt.Sprintf("https://autocomplete.search.hereapi.com/v1/autocomplete?q=%s&limit=1&apiKey=%s", name, apiKey)
+	resp, err := http.Get(autoCompleteURL)
+	if err != nil {
+		fmt.Println("Error making the autocomplete request:", err)
+		return "", err
+	}
+	defer resp.Body.Close()
+
+	var autoResp model.AutocompleteResponse
+	body, _ := io.ReadAll(resp.Body)
+	err = json.Unmarshal(body, &autoResp)
+	if err != nil || len(autoResp.Items) == 0 {
+		fmt.Println("Error parsing autocomplete response:", err)
+		return "", err
+	}
+	placeID := autoResp.Items[0].ID
+
+	// Geocoding request to get latitude and longitude
+	geocodeURL := fmt.Sprintf("https://lookup.search.hereapi.com/v1/lookup?id=%s&apiKey=%s", placeID, apiKey)
+	resp, err = http.Get(geocodeURL)
+	if err != nil {
+		fmt.Println("Error making the geocode request:", err)
+		return "", err
+	}
+	defer resp.Body.Close()
+
+	var geoResp model.GeocodeResponse
+	body, _ = io.ReadAll(resp.Body)
+	err = json.Unmarshal(body, &geoResp)
+	if err != nil {
+		fmt.Println("Error parsing geocode response:", err)
+		return "", err
+	}
+
+	// println(name,"%f %f",geoResp.Position.Lat, geoResp.Position.Lng)
+	return fmt.Sprintf("%f %f", geoResp.Position.Lat, geoResp.Position.Lng), nil
 }

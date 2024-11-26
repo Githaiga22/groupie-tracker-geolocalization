@@ -1,12 +1,14 @@
 package handlers
 
 import (
+	"encoding/json"
 	"fmt"
 	"html/template"
 	"log"
 	"net/http"
 	"os"
 	"strconv"
+	"strings"
 
 	model "tracker/models"
 	"tracker/src"
@@ -105,12 +107,49 @@ func LocationHandler(w http.ResponseWriter, r *http.Request) {
 
 	tmpl, err := template.ParseFiles("templates/locations.html")
 	if err != nil {
-		InternalServerHandler(w)
+		http.Error(w, "Error loading page", http.StatusInternalServerError)
 		log.Println("Template 2 parsing error: ", err)
 		return
 
 	}
-	err = tmpl.Execute(w, locations)
+
+	type tempLocations struct {
+		Name      string
+		Locations []string
+	}
+
+	// create a map[string]string{locationName:[lat;long]}
+	locationMap := []tempLocations{}
+	if len(locations.Locations) > 0 {
+		for _, locationNames := range locations.Locations {
+			latLong, err := src.FetchLocationMap(locationNames)
+			if err != nil {
+				InternalServerHandler(w)
+				log.Println("Error retrieving coordinates: ", err)
+				return
+			}
+			splitCoordinates := strings.Split(latLong, " ")
+			// println(locationNames,splitCoordinates[0], "and", splitCoordinates[1])
+			newLocation := tempLocations{locationNames, splitCoordinates}
+
+			// println(newLocation.Name, newLocation.Locations[0], newLocation.Locations[1])
+
+			locationMap = append(locationMap, newLocation)
+			// locationMap[locationNames] = []string{splitCoordinates[0],splitCoordinates[1]}
+		}
+	}
+
+	locationMapJSON, err := json.Marshal(locationMap)
+	if err != nil {
+		log.Println("Error serializing LocationMap:", err)
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+
+	data := map[string]interface{}{
+		"LocationMap": string(locationMapJSON),
+	}
+	err = tmpl.Execute(w, data)
 	if err != nil {
 		log.Println("Template 2 execution error: ", err)
 		return
@@ -126,7 +165,7 @@ func ArtistHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
 		wrongMethodHandler(w)
 		return
-	}  
+	}
 
 	id := r.URL.Query().Get("id")
 
@@ -144,18 +183,14 @@ func ArtistHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	idNum -= 1
 
-
-
 	if len(AllArtistInfo) == 0 {
 		r.URL.Path = "/"
 		r.Method = http.MethodGet
 		HomepageHandler(w, r)
-		log.Println("here here")
 		return
 	}
 
 	AllArtistInfo[idNum].DateAndLocation = datesAndConcerts
-
 
 	Data := AllArtistInfo[idNum]
 
@@ -226,8 +261,8 @@ func HomepageHandler(w http.ResponseWriter, r *http.Request) {
 
 func renderErrorPage(w http.ResponseWriter, statusCode int, title, message string) {
 	w.WriteHeader(statusCode)
-	tmpl,err := template.ParseFiles("templates/error.html")
-	if err != nil{
+	tmpl, err := template.ParseFiles("templates/error.html")
+	if err != nil {
 		log.Println("Error page parsing error:", err)
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 		return
@@ -241,8 +276,37 @@ func renderErrorPage(w http.ResponseWriter, statusCode int, title, message strin
 		Message: message,
 	}
 	if err := tmpl.Execute(w, data); err != nil {
-		InternalServerHandler(w)
+		log.Println("Error: page execution:", err)
+		http.Error(w, "Internal SErver Error", http.StatusInternalServerError)
 	}
+}
+
+// Response represents the API key response structure
+type Response struct {
+	APIKey string `json:"apiKey"`
+}
+
+// GetApiKey handles the API key retrieval endpoint
+func GetApiKey(w http.ResponseWriter, r *http.Request) {
+	// Only allow GET requests
+	if r.Method != http.MethodGet {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+
+	apiKey := os.Getenv("HEREAPI_KEY")
+	if apiKey == "" {
+		// Set JSON content type even for errors
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(map[string]string{
+			"error": "API key not set",
+		})
+		return
+	}
+
+	// Set content type before writing response
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(Response{APIKey: apiKey})
 }
 
 func notFoundHandler(w http.ResponseWriter) {
