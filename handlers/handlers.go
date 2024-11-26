@@ -187,7 +187,6 @@ func ArtistHandler(w http.ResponseWriter, r *http.Request) {
 		r.URL.Path = "/"
 		r.Method = http.MethodGet
 		HomepageHandler(w, r)
-		log.Println("here here")
 		return
 	}
 
