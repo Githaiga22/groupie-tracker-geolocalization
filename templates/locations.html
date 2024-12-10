@@ -39,19 +39,27 @@
 
         const locationList = document.getElementById('locations');
 
-        locationMap.forEach(location => {
+        locationMap.forEach((location,index) => {
             const listItem = document.createElement('li');
+            const button = document.createElement('button');
+            button.textContent = 'See on Map'
+
+            button.setAttribute('data-index', index);
+
             listItem.className = 'places';
             listItem.textContent = location.Name;
+            listItem.appendChild(button)
             locationList.appendChild(listItem);
+
             // console.log(location.Name)
         });
-        
+
         // Initialize map functionality
-        function initMap(apiKey) {
+        function initMap(apiKey,index) {
             const platform = new H.service.Platform({
                 apikey: apiKey
             });
+            index = (typeof index !== 'undefined') ? index : 0;
 
             // Map configuration. Default to london
             const latitude = 51.5074;
@@ -64,17 +72,20 @@
                 defaultLayers.vector.normal.map,
                 {
                     center: { lat: latitude, lng: longitude },
-                    zoom: 2.1,
-                    maxZoom:0,
+                    zoom: 3,
+                    // maxZoom:3,
                     pixelRatio: window.devicePixelRatio || 1
                 }
             );
 
+            defaultLayers.vector.normal.map.setMin(3);
             // Add window resize handler
             window.addEventListener('resize', () => map.getViewPort().resize());
 
             // Enable map interactions
             const behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
+            // set max zoom
+            // behavior.zoom.setMax(3);
             // Add UI controls
             const ui = H.ui.UI.createDefault(map, defaultLayers);
             // Add custom marker
@@ -89,12 +100,33 @@
               locationMap.forEach(location => {
                 const latitude = parseFloat(location.Locations[0]);
                 const longitude = parseFloat(location.Locations[1]);
-                console.log(latitude,longitude)  
+                // console.log(latitude,longitude)  
                 const marker = new H.map.Marker({lat: latitude,lng: longitude},{icon: icon});
                 map.addObject(marker);              
             });
+
+            function updateMapCenter(index) {
+                if (typeof index !== 'undefined' && locationMap[index]?.Locations)  {
+                    const newLat = parseFloat(locationMap[index].Locations[0]);
+                    const newLng = parseFloat(locationMap[index].Locations[1]);
+                    map.setCenter({ lat: newLat, lng: newLng });
+                    map.setZoom(10);
+                } else {
+                    console.log("Invalid location index");
+                }
             }
-                        // Fetch API key and initialize map
+
+            const buttons = document.querySelectorAll('button')
+
+            buttons.forEach(button => {
+                button.addEventListener('click',(event) => {
+                    const buttonIndex = event.target.getAttribute('data-index');
+                    console.log(`${buttonIndex}`)
+                    updateMapCenter(buttonIndex )
+                })
+            })
+        }
+        apiKey = ''         // Fetch API key and initialize map
         fetch('/getApiKey')
             .then(response => {
                 if (!response.ok) {
@@ -106,7 +138,8 @@
                 if (!data.apiKey) {
                     throw new Error('Invalid API key');
                 }
-                initMap(data.apiKey);
+                initMap(data.apiKey,locationMap);
+                apiKey = data.apiKey;
             })
             .catch(error => {
                 console.error('Error:', error);
@@ -139,3 +172,8 @@
     </script>
 </body>
 </html>
+
+<!-- 
+    
+
+ -->
