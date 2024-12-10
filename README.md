@@ -30,6 +30,10 @@ git clone https://learn.zone01kisumu.ke/git/allkamau/groupie-tracker.git
 ```bash
  cd groupie-tracker
  ```
+3. Set up API key for HERE MAPS
+```bash
+export HEREAPI_KEY="api key here"
+``` 
 4. Run the application: 
 ```bash
 go run .
