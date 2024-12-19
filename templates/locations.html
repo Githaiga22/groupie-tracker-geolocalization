@@ -51,7 +51,7 @@
             listItem.appendChild(button)
             locationList.appendChild(listItem);
 
-            // console.log(location.Name)
+        
         });
 
         // Initialize map functionality
@@ -73,7 +73,6 @@
                 {
                     center: { lat: latitude, lng: longitude },
                     zoom: 3,
-                    // maxZoom:3,
                     pixelRatio: window.devicePixelRatio || 1
                 }
             );
@@ -84,8 +83,7 @@
 
             // Enable map interactions
             const behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
-            // set max zoom
-            // behavior.zoom.setMax(3);
+            
             // Add UI controls
             const ui = H.ui.UI.createDefault(map, defaultLayers);
             // Add custom marker
@@ -99,8 +97,7 @@
 
               locationMap.forEach(location => {
                 const latitude = parseFloat(location.Locations[0]);
-                const longitude = parseFloat(location.Locations[1]);
-                // console.log(latitude,longitude)  
+                const longitude = parseFloat(location.Locations[1]);  
                 const marker = new H.map.Marker({lat: latitude,lng: longitude},{icon: icon});
                 map.addObject(marker);              
             });
@@ -172,8 +169,3 @@
     </script>
 </body>
 </html>
-
-<!-- 
-    
-
- -->
