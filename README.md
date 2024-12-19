@@ -1,9 +1,8 @@
-# Groupie Tracker
+# Groupie Tracker Geolocalization
 
 ## Project Overview
  
- Groupie Tracker is a web application designed to help music enthusiasts keep track of their favorite artists and bands. The application allows users to see artists, view their discography, and explore similar artists.
-
+ Groupie Tracker Geolocalization is a web application designed to help music enthusiasts keep track of their favorite artists and bands. The application allows users to see the location of their favourite artist concerts on a map.
 ### Features:
 
 - Artist profile pages with discography and biography
@@ -13,6 +12,7 @@
 
 ### Technologies Used:
 - Frontend: HTML, CSS, JavaScript
+- Here maps API
 - Backend: Go (Golang)
 - Template Engine: Go Templates
 
@@ -24,11 +24,11 @@
 ### Installation
 1. Clone the repository: 
 ```bash
-git clone https://learn.zone01kisumu.ke/git/allkamau/groupie-tracker.git
+git clone https://learn.zone01kisumu.ke/git/fgitonga/groupie-tracker-geolocalization.git
 ```
 2. Navigate to the project directory:
 ```bash
- cd groupie-tracker
+ cd groupie-tracker-geolocalization
  ```
 3. Set up API key for HERE MAPS
 ```bash
@@ -40,7 +40,7 @@ go run .
 ```
 ### How to Run:
 1. Open a web browser and navigate to http://localhost:8081
-3. Explore the artist's profile page, discography, and similar artists
+3. Explore the artist's Location page and view concerts locations on a map
 
 ### Contributing:
 Contributions are welcome! If you'd like to contribute to Groupie Tracker, please follow these steps:
