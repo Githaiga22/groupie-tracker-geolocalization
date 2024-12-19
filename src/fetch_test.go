@@ -1,7 +1,8 @@
 package src
 
 import (
-	"testing"
+	
+    "testing"
 )
 
 // TestFetchArtists tests the FetchArtists function.
